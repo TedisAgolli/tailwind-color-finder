@@ -1,65 +1,62 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { urlObjectKeys } from "next/dist/next-server/lib/utils";
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import { deltaE, rgb2lab } from "../utils/colors";
+import tailwindColors from "../utils/tailwindColors";
+
+const hexToRgb = (hex) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+};
+
+const hexToLab = (hex) => {
+  const rgb = hexToRgb(hex);
+  return rgb2lab([rgb.r, rgb.g, rgb.b]);
+};
+
+const tailwindColorsToLab = (colors) => {
+  const allColors = [];
+  Object.entries(colors).forEach((color) => {
+    const colorName = color[0];
+    Object.entries(color[1]).forEach((subColor) => {
+      allColors.push({
+        main: colorName,
+        sub: subColor[0],
+        val: subColor[1],
+        lab: hexToLab(subColor[1]),
+      });
+      //   colors[colorName][subColor[0]] = hexToLab(subColor[1]);
+    });
+  });
+  return allColors;
+};
+
+const getClosestTailwindColorToHex = (hex) => {
+  const userInputLab = hexToLab(hex);
+};
 
 export default function Home() {
+  //   const lab2 = hexToLab(tailwindColors.black);
+  //   console.log(deltaE(lab1, lab2));
+  const lab1 = hexToLab("#0070F3");
+  var labTailwind = tailwindColorsToLab(tailwindColors)
+    .map((col) => ({
+      deltaE: deltaE(col.lab, lab1),
+      ...col,
+    }))
+    .sort((a, b) => a.deltaE - b.deltaE);
+  const closestCol = labTailwind[0];
+  console.log();
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+    <div>
+      {`The closest color is ${closestCol.main}-${closestCol.sub} with a deltaE of ${closestCol.deltaE}`}
     </div>
-  )
+  );
 }
