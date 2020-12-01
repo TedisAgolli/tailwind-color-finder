@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { deltaE, rgb2lab } from "../utils/colors";
 import tailwindColors from "../utils/tailwindColors";
+import ColorSquare from "../components/ColorSquare";
 
 const hexToRgb = (hex) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -55,17 +56,29 @@ export default function Home() {
 
   return (
     <div>
-      <form onSubmit={findClosest}>
-        <input
-          type="text"
-          onChange={onColorInputChange}
-          value={colorInput}
-          placeholder="Enter hex color here"
-        ></input>
-        <button type="submit">Find closest</button>
-      </form>
-      {closestCol &&
-        `The closest color is ${closestCol.main}-${closestCol.sub} (hex ${closestCol.hex}) with a deltaE of ${closestCol.deltaE}`}
+      <div className="flex flex-col items-center bg-gray-200 min-h-screen">
+        <form onSubmit={findClosest}>
+          <input
+            type="text"
+            onChange={onColorInputChange}
+            value={colorInput}
+            class="shadow-md m-2 p-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+            placeholder="Enter hex color here"
+          />
+          <button
+            type="submit"
+            class="m-1 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Find closest
+          </button>
+        </form>
+        {closestCol &&
+          `The closest color is ${closestCol.main}-${closestCol.sub} (hex ${closestCol.hex}) with a deltaE of ${closestCol.deltaE}`}
+        <div className="flex flex-row m-2">
+          <ColorSquare hex={colorInput} isOriginal />
+          <ColorSquare hex={closestCol.hex} isOriginal={false} />
+        </div>
+      </div>
     </div>
   );
 }
