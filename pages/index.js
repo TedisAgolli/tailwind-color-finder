@@ -3,6 +3,19 @@ import { deltaE, rgb2lab } from "../utils/colors";
 import tailwindColors from "../utils/tailwindColors";
 import ColorSquare from "../components/ColorSquare";
 
+const explainDeltaE = (deltaE) => {
+  if (deltaE <= 1.0) {
+    return "Not perceptible by human eyes";
+  } else if (deltaE > 1 && deltaE <= 2) {
+    return "Perceptible through close observation";
+  } else if (deltaE > 2 && deltaE <= 10) {
+    return "Perceptible at a glance";
+  } else if (deltaE > 10 && deltaE <= 49) {
+    return "Colors are more similar than opposite";
+  } else {
+    return "Colors are exact opposite";
+  }
+};
 const isValidHex = (hex) => /^#([0-9A-F]{3}){1,2}$/i.test(hex);
 const hexToRgb = (hex) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -83,7 +96,16 @@ export default function Home() {
       />
       {isValidHex(colorInput) && closestCol && (
         <div className="flex flex-col text-center text-white text-lg m-2">
-          {` Delta E = ${closestCol.deltaE}`}
+          <span className="text-base">
+            Delta E ={" "}
+            <span className=" text-lg font-semibold">{closestCol.deltaE}</span>
+          </span>
+          <div className="text-sm text-gray-300">
+            {explainDeltaE(closestCol.deltaE)}{" "}
+            <a href="http://zschuessler.github.io/DeltaE/learn/">
+              <sup>[1]</sup>
+            </a>
+          </div>
           <div className="flex flex-row justify-center m-2">
             <ColorSquare hex={colorInput} isOriginal />
             <ColorSquare
