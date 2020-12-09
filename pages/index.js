@@ -2,6 +2,7 @@ import { useState } from "react";
 import { deltaE, rgb2lab } from "../utils/colors";
 import tailwindColors from "../utils/tailwindColors";
 import ColorSquare from "../components/ColorSquare";
+import Head from "next/head";
 
 const explainDeltaE = (deltaE) => {
   if (deltaE <= 1.0) {
@@ -84,6 +85,10 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center py-10 bg-gray-800 min-h-screen">
+      <Head>
+        <title>Hex to Tailwind Converter</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <h1 className="my-10 text-center text-white text-5xl">
         Hex to Tailwind Converter
       </h1>
