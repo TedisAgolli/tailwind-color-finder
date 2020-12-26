@@ -1,18 +1,18 @@
 {
-  "name": "tailwind-color-matcher",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "autoprefixer": "^10.0.4",
-    "next": "10.0.3",
-    "postcss": "^8.1.10",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "tailwindcss": "^2.0.1"
-  }
+    "name": "tailwind-color-matcher",
+    "version": "0.1.0",
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start"
+    },
+    "dependencies": {
+        "autoprefixer": "^10.1.0",
+        "hex-to-tailwind": "^1.0.1",
+        "next": "10.0.3",
+        "postcss": "^8.2.1",
+        "react": "17.0.1",
+        "react-dom": "17.0.1",
+        "tailwindcss": "^2.0.2"
+    }
 }
