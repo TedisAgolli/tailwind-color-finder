@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ColorSquare from "../components/ColorSquare";
-import hexToTailwind from "hex-to-tailwind";
 import Head from "next/head";
 import hexToTailwind from "hex-to-tailwind";
 
@@ -24,12 +23,6 @@ export default function Home() {
   const [closestCol, setClosestCol] = useState("");
   const onColorInputChange = (e) => {
     setColorInput(e.target.value);
-    findClosest(e.target.value);
-  };
-  const findClosest = (hexInput) => {
-    if (!isValidHex(hexInput)) {
-      return;
-    }
     setClosestCol(hexToTailwind(hexInput));
   };
 
