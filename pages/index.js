@@ -3,6 +3,7 @@ import { deltaE, rgb2lab } from "../utils/colors";
 import tailwindColors from "../utils/tailwindColors";
 import ColorSquare from "../components/ColorSquare";
 import Head from "next/head";
+import hexToTailwind from "hex-to-tailwind";
 
 const explainDeltaE = (deltaE) => {
   if (deltaE <= 1.0) {
@@ -29,58 +30,12 @@ const hexToRgb = (hex) => {
     : null;
 };
 
-const hexToLab = (hex) => {
-  const rgb = hexToRgb(hex);
-  return rgb2lab([rgb.r, rgb.g, rgb.b]);
-};
-
-const handle3DigitHex = (hexInput) =>
-  hexInput.length === 4
-    ? hexInput
-        // Remove leading #
-        .slice(1)
-        .split("")
-        .map((hex) => hex + hex)
-        .join("")
-    : hexInput;
-
-const tailwindColorsToLab = (colors) => {
-  const allColors = [];
-  Object.entries(colors).forEach((color) => {
-    const colorName = color[0];
-    Object.entries(color[1]).forEach((subColor) => {
-      allColors.push({
-        main: colorName,
-        sub: subColor[0],
-        hex: subColor[1],
-        lab: hexToLab(subColor[1]),
-      });
-    });
-  });
-  return allColors;
-};
-
-const labTailwind = tailwindColorsToLab(tailwindColors);
 export default function Home() {
   const [colorInput, setColorInput] = useState("");
   const [closestCol, setClosestCol] = useState("");
   const onColorInputChange = (e) => {
     setColorInput(e.target.value);
-    findClosest(e.target.value);
-  };
-  const findClosest = (hexInput) => {
-    if (!isValidHex(hexInput)) {
-      return;
-    }
-    const finalHex = handle3DigitHex(hexInput);
-    const labColorInput = hexToLab(finalHex);
-    const comparedColors = labTailwind
-      .map((col) => ({
-        deltaE: deltaE(col.lab, labColorInput).toFixed(2),
-        ...col,
-      }))
-      .sort((a, b) => a.deltaE - b.deltaE);
-    setClosestCol(comparedColors[0]);
+    setClosestCol(hexToTailwind(e.target.value));
   };
 
   return (
@@ -114,8 +69,8 @@ export default function Home() {
           <div className="flex flex-row justify-center m-2">
             <ColorSquare hex={colorInput} isOriginal />
             <ColorSquare
-              tailwind={`${closestCol.main}-${closestCol.sub}`}
-              hex={closestCol.hex}
+              tailwind={closestCol.tailwind}
+              hex={closestCol.tailwindHex}
               isOriginal={false}
             />
           </div>
