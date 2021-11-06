@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { deltaE, rgb2lab } from "../utils/colors";
-import tailwindColors from "../utils/tailwindColors";
 import ColorSquare from "../components/ColorSquare";
+import hexToTailwind from "hex-to-tailwind";
 import Head from "next/head";
 import hexToTailwind from "hex-to-tailwind";
 
@@ -19,23 +18,19 @@ const explainDeltaE = (deltaE) => {
   }
 };
 const isValidHex = (hex) => /^#([0-9A-F]{3}){1,2}$/i.test(hex);
-const hexToRgb = (hex) => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
-};
 
 export default function Home() {
   const [colorInput, setColorInput] = useState("");
   const [closestCol, setClosestCol] = useState("");
   const onColorInputChange = (e) => {
     setColorInput(e.target.value);
-    setClosestCol(hexToTailwind(e.target.value));
+    findClosest(e.target.value);
+  };
+  const findClosest = (hexInput) => {
+    if (!isValidHex(hexInput)) {
+      return;
+    }
+    setClosestCol(hexToTailwind(hexInput));
   };
 
   return (
