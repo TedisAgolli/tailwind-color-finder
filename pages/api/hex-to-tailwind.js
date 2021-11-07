@@ -2,6 +2,7 @@
 import hexToTailwind from "hex-to-tailwind";
 
 export default (req, res) => {
+  console.log(req.body);
   let { hex } = req.query;
   if (!hex.startsWith("#")) {
     hex = `#${hex}`;
