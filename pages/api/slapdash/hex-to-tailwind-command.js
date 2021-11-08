@@ -4,9 +4,9 @@ import { explainDeltaE } from "../utils";
 
 export default (req, res) => {
   let hex = req.query.keywords;
-
+  res.setHeader("Access-Control-Allow-Origin", "*");
   if (hex === undefined) {
-    res.setHeader("Access-Control-Allow-Origin", "*").status(200).json({
+    res.status(200).json({
       inputPlaceholder: "Type a hex color",
       view: "Type a hex color",
     });
@@ -17,12 +17,9 @@ export default (req, res) => {
   }
   const resValue = hexToTailwind(hex);
   if (resValue) {
-    res
-      .setHeader("Access-Control-Allow-Origin", "*")
-      .status(200)
-      .json(showCopyTailwind(resValue));
+    res.status(200).json(showCopyTailwind(resValue));
   } else {
-    res.setHeader("Access-Control-Allow-Origin", "*").status(200).json({
+    res.status(200).json({
       view: "Invalid color.",
     });
   }
