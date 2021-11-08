@@ -6,7 +6,7 @@ export default (req, res) => {
   let hex = req.query.keywords;
 
   if (hex === undefined) {
-    res.status(200).json({
+    res.setHeader("Access-Control-Allow-Origin", "*").status(200).json({
       inputPlaceholder: "Type a hex color",
       view: "Type a hex color",
     });
@@ -17,9 +17,12 @@ export default (req, res) => {
   }
   const resValue = hexToTailwind(hex);
   if (resValue) {
-    res.status(200).json(showCopyTailwind(resValue));
+    res
+      .setHeader("Access-Control-Allow-Origin", "*")
+      .status(200)
+      .json(showCopyTailwind(resValue));
   } else {
-    res.status(200).json({
+    res.setHeader("Access-Control-Allow-Origin", "*").status(200).json({
       view: "Invalid color.",
     });
   }
